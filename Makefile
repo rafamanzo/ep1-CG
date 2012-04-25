@@ -1,8 +1,8 @@
 ep1: main.o input.o vector_field.o vector_operations.o
-	g++ main.o vector_field.o input.o vector_operations.o -o ep1
+	g++ main.o vector_field.o input.o vector_operations.o -lglut -o ep1
 	
 main.o: main.cpp vector_field.h input.h
-	g++ -c main.cpp
+	g++ -c main.cpp -lglut
 	
 input.o: input.cpp input.h vector_field.h
 	g++ -c input.cpp
