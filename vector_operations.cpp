@@ -1,7 +1,23 @@
-#include<stdlib.h>
+#include<stdlib.h> 
 #include<math.h>
 #include "vector_field.h"
 #include "vector_operations.h"
+#ifndef PI
+#define PI 3.141592653589793
+#endif
+
+double angle_x(vector v){
+    return acosf(v.x/module(v))*180/PI;
+}
+
+double angle_y(vector v){
+    return acosf(v.y/module(v))*180/PI;
+}
+
+double angle_z(vector v){
+    return acosf(v.z/module(v))*180/PI;
+}
+
 
 vector sum(vector v1, vector v2){
   vector sum;
