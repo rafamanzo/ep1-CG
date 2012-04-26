@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include<stdlib.h> 
 #include<math.h>
 #include "vector_field.h"
@@ -7,15 +8,39 @@
 #endif
 
 double angle_x(vector v){
-    return acosf(v.x/module(v))*180/PI;
+    double mod, teta;
+
+    mod = module(v);
+    if( mod == 0.0 )
+      return 0.0;
+
+    if( (teta = v.x/mod) > 0  )
+      return (-2*PI+acosf(teta))*180/PI;
+    return acosf(teta)*180/PI;
 }
 
 double angle_y(vector v){
-    return acosf(v.y/module(v))*180/PI;
+    double mod, teta;
+
+    mod = module(v);
+    if( mod == 0.0 )
+      return 0.0;
+
+    if( (teta = v.y/mod) > 0  )
+      return (-2*PI+acosf(teta))*180/PI;
+    return acosf(teta)*180/PI;
 }
 
 double angle_z(vector v){
-    return acosf(v.z/module(v))*180/PI;
+    double mod, teta;
+
+    mod = module(v);
+    if( mod == 0.0 )
+      return 0.0;
+
+    if( (teta = v.z/mod) > 0  )
+      return (-2*PI+acosf(teta))*180/PI;
+    return acosf(teta)*180/PI;
 }
 
 

@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include<stdlib.h>
 #include "vector_field.h"
 #include "vector_operations.h"
@@ -58,9 +59,9 @@ static void plot_vectors(){
   max_leght = sqrt(pow(field.d_x, 2) + pow(field.d_y, 2) + pow(field.d_z, 2));
 
   if(teste){/* Plota apenas uma vez e some */
-  for( i=0; i < field.n_x; i++){
-      for( j=0; j < field.n_y; j++){
-          for( k=0; k < field.n_z; k++){
+  for(k = 0; k < field.n_z; k++){
+    for(j = 0; j < field.n_y; j++){
+      for(i = 0; i < field.n_x; i++){
             mod = module(field.vectors[i][j][k]);
             if( mod > max_leght )
               mod = max_leght;
@@ -69,10 +70,11 @@ static void plot_vectors(){
               /* esse 0.1 deve ser definido caso a caso */
               glTranslated(field.d_x-0.1*i,field.d_y-j*0.1,field.d_z-k*0.1);
               /* Achar a ordem correta */
+              glRotated(angle_y(field.vectors[i][j][k]),0,1,0);
               glRotated(angle_x(field.vectors[i][j][k]),1,0,0);
               glRotated(angle_z(field.vectors[i][j][k]),0,0,1);
-              glRotated(angle_y(field.vectors[i][j][k]),0,1,0);
               glutSolidCone(0.03,mod*0.1,slices,stacks);
+
             glPopMatrix();
           }
       }
