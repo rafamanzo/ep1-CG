@@ -4,34 +4,34 @@
 #include "vector_field.h"
 #include "input.h"
 
-void parseFile(char *file, vector_field *field){
+void parseFile(char *file, VectorField *vf){
   FILE *fp;
-  int i, j, k;
+  double d_x, d_y, d_z;
+  int i, j, k, n_x, n_y, n_z;
+  vector aux;
   fp = fopen(file, "r");
   
-  fscanf(fp, "%d", &((*field).n_x));
-  fscanf(fp, "%d", &((*field).n_y));
-  fscanf(fp, "%d", &((*field).n_z));
+  fscanf(fp, "%d", &n_x);
+  fscanf(fp, "%d", &n_y);
+  fscanf(fp, "%d", &n_z);
   
-  fscanf(fp, "%lf", &((*field).d_x));
-  fscanf(fp, "%lf", &((*field).d_y));
-  fscanf(fp, "%lf", &((*field).d_z));
+  fscanf(fp, "%lf", &d_x);
+  fscanf(fp, "%lf", &d_y);
+  fscanf(fp, "%lf", &d_z);
     
-  (*field).vectors = (vector ***) malloc( ((*field).n_x) * sizeof(vector **) );
-  for(i = 0; i < ((*field).n_x); i++){
-    (*field).vectors[i] = (vector **) malloc( ((*field).n_y) * sizeof(vector *) );
-    for(j = 0; j < ((*field).n_y); j++)
-      (*field).vectors[i][j] = (vector *) malloc( ((*field).n_z) * sizeof(vector) );
-  }
-    
+  VectorField vf_aux(d_x, d_y, d_z, n_x, n_y, n_z);  
   
-  for(k = 0; k < (*field).n_z; k++){
-    for(j = 0; j < (*field).n_y; j++){
-      for(i = 0; i < (*field).n_x; i++){
-        fscanf(fp, "%lf", &(((*field).vectors[i][j][k]).x));
-        fscanf(fp, "%lf", &(((*field).vectors[i][j][k]).y));
-        fscanf(fp, "%lf", &(((*field).vectors[i][j][k]).z));
+  for(k = 0; k < n_z; k++){
+    for(j = 0; j < n_y; j++){
+      for(i = 0; i < n_x; i++){
+        fscanf(fp, "%lf", &aux.x);
+        fscanf(fp, "%lf", &aux.y);
+        fscanf(fp, "%lf", &aux.z);
+        
+        vf_aux.setVector(i, j, k, aux);
       }
     }
   }
+  
+  *vf = vf_aux;
 }

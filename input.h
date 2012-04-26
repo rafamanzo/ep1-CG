@@ -1,1 +1,1 @@
-void parseFile(char *file, vector_field *field);
+void parseFile(char *file, VectorField *vf);
