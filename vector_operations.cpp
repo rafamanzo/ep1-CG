@@ -8,15 +8,18 @@
 #endif
 
 double angle_x(vector v){
-    double mod, teta;
+    double mod, cos;
 
     mod = module(v);
     if( mod == 0.0 )
       return 0.0;
 
-    if( (teta = v.x/mod) > PI || teta < -1*PI  )
-      return acosf(teta)*180/PI;
-    return -acosf(teta)*180/PI;
+    if( v.x > 0 && v.x < PI )
+      return acosf(v.x/mod)*180/PI;
+    else if  (v.x > PI && v.x < 1.5*PI) 
+      return (PI-acosf(v.x/mod))*180/PI;
+    else
+      return -acosf(v.x/mod)*180/PI;
 }
 
 double angle_y(vector v){
@@ -26,9 +29,12 @@ double angle_y(vector v){
     if( mod == 0.0 )
       return 0.0;
 
-    if( (teta = v.y/mod) > PI || teta < -1*PI  )
-      return acosf(teta)*180/PI;
-    return -acosf(teta)*180/PI;
+    if( v.y > 0 && v.y < PI)
+      return acosf(v.y/mod)*180/PI;
+    else if  (v.y > PI && v.y < 1.5*PI) 
+      return (PI-acosf(v.y/mod))*180/PI;
+    else 
+      return -acosf(v.y/mod)*180/PI;
 }
 
 double angle_z(vector v){
@@ -38,11 +44,13 @@ double angle_z(vector v){
     if( mod == 0.0 )
       return 0.0;
 
-    if( (teta = v.z/mod) > PI || teta < -1*PI  )
-      return acosf(teta)*180/PI;
-    return -acosf(teta)*180/PI;
+    if( v.z > 0 && v.z < PI)
+      return acosf(v.z/mod)*180/PI;
+    else if  (v.z > PI && v.z < 1.5*PI) 
+      return (PI-acosf(v.z/mod))*180/PI;
+    else
+      return -acosf(v.z/mod)*180/PI;
 }
-
 
 vector sum(vector v1, vector v2){
   vector sum;

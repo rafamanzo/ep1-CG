@@ -23,31 +23,6 @@ static void resize(int width, int height){
     glLoadIdentity() ;
 }
 
-static void display(void){
-  const double t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
-  const double a = t*90.0;
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glColor3d(1,0,0);
-
-    glPushMatrix();
-        glTranslated(0,0,-10);
-        glScaled(8,6,8);    
-        glutWireCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-        glTranslated(0,-1.2,-6);
-        //glRotated(60,1,0,0);
-        //glRotated(a,0,0,1);
-
-              glutSolidCone(1,1,slices,stacks); 
-   glPopMatrix();
-
-    glutSwapBuffers();
-}
-
-
 static void plot_vectors(){
   //const double t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
   //const double a = t*90.0;
@@ -55,7 +30,7 @@ static void plot_vectors(){
   double mod, max_leght;
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glColor3d(1,0,0);
+  glColor3d(0,0,1);
   max_leght = sqrt(pow(field.d_x, 2) + pow(field.d_y, 2) + pow(field.d_z, 2));
 
   if(teste){/* Plota apenas uma vez e some */
@@ -67,11 +42,14 @@ static void plot_vectors(){
               mod = max_leght;
 
             glPushMatrix();
+              printf("v = (%f,%f,%f) |v| = %f\n",field.vectors[i][j][k].x,field.vectors[i][j][k].y,field.vectors[i][j][k].z,module(field.vectors[i][j][k]));
               /* esse 0.1 deve ser definido caso a caso */
               glTranslated(field.d_x-0.1*i,field.d_y-j*0.1,field.d_z-k*0.1);
-              /* Achar a ordem correta */
-		          glRotated(angle_y(field.vectors[i][j][k]),0,1,0);
+              printf("ry = (%f)\n",-angle_y(field.vectors[i][j][k]));
+              glRotated(angle_y(field.vectors[i][j][k]),0,1,0);
+              printf("rx = (%f)\n",angle_x(field.vectors[i][j][k]));
               glRotated(angle_x(field.vectors[i][j][k]),1,0,0);
+              printf("rz = (%f)\n",angle_z(field.vectors[i][j][k]));
               glRotated(angle_z(field.vectors[i][j][k]),0,0,1);
               glutSolidCone(0.03,mod*0.1,slices,stacks);
 
@@ -138,7 +116,7 @@ int main(int argc, char *argv[]){
   glutDisplayFunc(plot_vectors);
 //  glutKeyboardFunc(key);
   glutIdleFunc(idle);
-  glClearColor(1,1,1,1);
+
  
     glutMainLoop();
 
