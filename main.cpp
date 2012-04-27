@@ -70,7 +70,7 @@ static void plot_vectors(){
               /* esse 0.1 deve ser definido caso a caso */
               glTranslated(field.d_x-0.1*i,field.d_y-j*0.1,field.d_z-k*0.1);
               /* Achar a ordem correta */
-              glRotated(angle_y(field.vectors[i][j][k]),0,1,0);
+		          glRotated(angle_y(field.vectors[i][j][k]),0,1,0);
               glRotated(angle_x(field.vectors[i][j][k]),1,0,0);
               glRotated(angle_z(field.vectors[i][j][k]),0,0,1);
               glutSolidCone(0.03,mod*0.1,slices,stacks);

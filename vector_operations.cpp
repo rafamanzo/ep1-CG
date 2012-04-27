@@ -14,9 +14,9 @@ double angle_x(vector v){
     if( mod == 0.0 )
       return 0.0;
 
-    if( (teta = v.x/mod) > 0  )
-      return (-2*PI+acosf(teta))*180/PI;
-    return acosf(teta)*180/PI;
+    if( (teta = v.x/mod) > PI || teta < -1*PI  )
+      return acosf(teta)*180/PI;
+    return -acosf(teta)*180/PI;
 }
 
 double angle_y(vector v){
@@ -26,9 +26,9 @@ double angle_y(vector v){
     if( mod == 0.0 )
       return 0.0;
 
-    if( (teta = v.y/mod) > 0  )
-      return (-2*PI+acosf(teta))*180/PI;
-    return acosf(teta)*180/PI;
+    if( (teta = v.y/mod) > PI || teta < -1*PI  )
+      return acosf(teta)*180/PI;
+    return -acosf(teta)*180/PI;
 }
 
 double angle_z(vector v){
@@ -38,9 +38,9 @@ double angle_z(vector v){
     if( mod == 0.0 )
       return 0.0;
 
-    if( (teta = v.z/mod) > 0  )
-      return (-2*PI+acosf(teta))*180/PI;
-    return acosf(teta)*180/PI;
+    if( (teta = v.z/mod) > PI || teta < -1*PI  )
+      return acosf(teta)*180/PI;
+    return -acosf(teta)*180/PI;
 }
 
 
