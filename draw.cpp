@@ -50,20 +50,9 @@ static void plot_vectors(){
         glPushMatrix();
               /* esse FATOR deve ser definido caso a caso */
         glTranslated(field.d_x-i,field.d_y-j,field.d_z-k);
-//        glTranslated(-i,j,-6-k);
-            	printf("rx = (%f)\n",angle_x(field.vectors[i][j][k]));
-            	printf("ry = (%f)\n",angle_y(field.vectors[i][j][k]));
-         // glRotated(angle_x(field.vectors[i][j][k]),1,0,0);
-         // glRotated(angle_z(field.vectors[i][j][k]),0,0,1);
-           //   glRotated(angle_x(field.vectors[i][j][k]),0,1,1);
-             //glRotated(angle_z(field.vectors[i][j][k]),1,1,0);
-             glRotated(angle_y(field.vectors[i][j][k]),0,1,0); 
+          glRotated(angle_y(field.vectors[i][j][k]),0,1,0); 
           glRotated(angle_x(field.vectors[i][j][k]),1,0,0);
           glRotated(angle_z(field.vectors[i][j][k]),0,0,1);
-//              printf("rz = (%f)\n",angle_z(field.vectors[i][j][k]));
-
-              //printf("rz = (%f)\n",angle_z(field.vectors[i][j][k]));
-             // glRotated(angle_z(field.vectors[i][j][k]),0,0,0);
           glutSolidCone(0.03,mod,16,16);
         glPopMatrix();
        }
@@ -101,6 +90,18 @@ static void plot_spheres(){
   glutSwapBuffers();
 }
 
+static void plot_cube(){
+
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  glColor3d(0,0,1);
+
+  glPushMatrix();
+    glTranslated(-2,2,-6);
+    glutWireCube(fmax(fmax(field.n_x,field.n_y),field.n_z));
+  glPopMatrix();
+}
+
 void key_pressed (unsigned char key, int x, int y) {  
 
   if( key == 'v')
@@ -108,6 +109,8 @@ void key_pressed (unsigned char key, int x, int y) {
   else if(key == 's')
     plot_spheres();
   else if(key == 'c')
+    plot_cube();
+  else if(key == 'l')
     clear();
 } 
 
