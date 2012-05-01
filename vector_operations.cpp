@@ -8,15 +8,15 @@
 #endif
 
 double angle_x(vector v){
-  return atan2(v.y,v.z)*180/PI;
+  return atan2(v.x,sqrt(v.y*v.y+v.z*v.z))*180/PI;
 }
 
 double angle_y(vector v){
-  return atan2(v.z,v.x)*180/PI;
+  return atan2(v.y,sqrt(v.x*v.x+v.z*v.z))*180/PI;
 }
 
 double angle_z(vector v){
-  return atan2(v.x,v.y)*180/PI;
+  return atan2(v.z,sqrt(v.x*v.x+v.y*v.y))*180/PI;
 }
 
 vector sum(vector v1, vector v2){

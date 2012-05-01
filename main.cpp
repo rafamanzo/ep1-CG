@@ -1,8 +1,9 @@
+#include "vector_field.h"
 #include "draw.h"
 #include "input.h"
 
 int main(int argc, char *argv[]){
-	vector_field f;
+  vector_field f;
 
   if(argc != 2)
     return -1;

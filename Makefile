@@ -1,5 +1,5 @@
-ep1: main.o input.o vector_field.o vector_operations.o draw.o
-	g++ main.o vector_field.o input.o vector_operations.o draw.o -lglut -o ep1
+ep1: main.o input.o vector_field.o vector_operations.o draw.o sphere.o
+	g++ main.o vector_field.o input.o vector_operations.o draw.o sphere.o -lglut -o ep1
 	
 main.o: main.cpp draw.h vector_field.h input.h draw.h
 	g++ -c main.cpp 
@@ -15,6 +15,7 @@ vector_operations.o: vector_operations.cpp vector_operations.h  vector_field.h
 
 draw.o: draw.cpp draw.h vector_field.h vector_operations.h
 	g++ -c draw.cpp -lglut
-
+sphere.o: sphere.cpp sphere.h vector_field.h
+	g++ -c sphere.cpp
 clean:
 	rm -f *~ *.o ep1

@@ -1,22 +1,26 @@
 #include <stdio.h>
 #include<stdlib.h>
 #include <math.h>
+#include "vector_field.h"
 #include "draw.h"
+#include "sphere.h"
 #include "vector_operations.h"
-#define FATOR 0.1
+
+#define FATOR 0.08
 
 
 vector_field field;
+spheres s;
+double time = 1;
 
 const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
-  const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
-  const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-  const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
-
-  const GLfloat mat_ambient[]    = { 0.7f, 0.7f, 0.7f, 1.0f };
-  const GLfloat mat_diffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
-  const GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
-  const GLfloat high_shininess[] = { 100.0f };
+const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
+const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
+const GLfloat mat_ambient[]    = { 0.7f, 0.7f, 0.7f, 1.0f };
+const GLfloat mat_diffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
+const GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
+const GLfloat high_shininess[] = { 100.0f };
 
 static void resize(int width, int height){
     const float ar = (float) width / (float) height;
@@ -35,7 +39,6 @@ static void plot_vectors(){
   double mod, max_legth;
 
   glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
   max_legth = sqrt(pow(field.d_x, 2) + pow(field.d_y, 2) + pow(field.d_z, 2));
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glColor3d(0,0,1);
@@ -47,18 +50,21 @@ static void plot_vectors(){
         if( mod > max_legth )
           mod = max_legth;
 
+//        printf("v = (%f,%f,%f)\n",field.vectors[i][j][k].x,field.vectors[i][j][k].y,field.vectors[i][j][k].z);
+//        printf("rx = %f\n",angle_x(field.vectors[i][j][k]));
+//        printf("ry = %f\n",angle_y(field.vectors[i][j][k]));
+//        printf("rz = %f\n",angle_z(field.vectors[i][j][k]));
         glPushMatrix();
-              /* esse FATOR deve ser definido caso a caso */
-        glTranslated(field.d_x-i,field.d_y-j,field.d_z-k);
-          glRotated(angle_y(field.vectors[i][j][k]),0,1,0); 
-          glRotated(angle_x(field.vectors[i][j][k]),1,0,0);
-          glRotated(angle_z(field.vectors[i][j][k]),0,0,1);
-          glutSolidCone(0.03,mod,16,16);
+         glTranslated((-i+field.d_x)*FATOR,(-j+field.d_y)*FATOR,(-k+field.d_z)*FATOR);
+         glRotated(angle_y(field.vectors[i][j][k]),0,1,0);
+         glRotated(angle_z(field.vectors[i][j][k]),0,0,1); 
+         glRotated(angle_x(field.vectors[i][j][k]),1,0,0); 
+         glutSolidCone(0.03,mod*FATOR,16,16);
         glPopMatrix();
        }
     }
  }
-  glutSwapBuffers();
+ glutSwapBuffers();
 }
 
 // ALTERAR
@@ -69,31 +75,29 @@ static void clear(void){
 
 static void plot_spheres(){
   int i, j, k;
-  double radius;
  
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glColor3d(1,0,0);
-  radius = fmax(fmax(field.d_x,field.d_y),field.d_z)*FATOR;  
-
   glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
+
   for(k = 0; k < field.n_z; k++){
     for(j = 0; j < field.n_y; j++){
       for(i = 0; i < field.n_x; i++){
+         go_spheres(&s,i,j,k,time, field);
          glPushMatrix();
-           glTranslated(field.d_x-i,field.d_y-j,field.d_z-k);
-           glutSolidSphere(radius,16,16);
+           glTranslated(s.all[i][j][k].x*FATOR,s.all[i][j][k].y*FATOR,s.all[i][j][k].z*FATOR);
+           glutSolidSphere(s.r*FATOR*0.5,16,16);
          glPopMatrix();
       }
     }
   }
+  time += 1;
   glutSwapBuffers();
 }
 
 static void plot_cube(){
 
   glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
   glColor3d(0,0,1);
 
   glPushMatrix();
@@ -116,7 +120,10 @@ void key_pressed (unsigned char key, int x, int y) {
 
 void draw_main(int argc, char *argv[], vector_field *f){
 
+
   field = *f;
+  start_spheres(field,&s);
+
 
   glutInit(&argc, argv);
   glutInitWindowSize(800,600);
@@ -148,7 +155,13 @@ void draw_main(int argc, char *argv[], vector_field *f){
   glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
   /* Fim */ 
 
-  glutReshapeFunc(resize);
+  /* Coordenas como em http://www.flashandmath.com/advanced/t1player10/system.jpg */
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  glRotated(180,0,1,0); 
+  glRotated(180,0,0,1);  
+
+//  glutReshapeFunc(resize);
   glutDisplayFunc(clear);
   glutKeyboardFunc(key_pressed);
   glutMainLoop();
