@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include<stdlib.h>
 #include <math.h>
+#include <GL/glut.h>
 #include "vector_field.h"
 #include "draw.h"
 #include "sphere.h"
@@ -12,6 +13,8 @@
 vector_field field;
 spheres s;
 double time = 1;
+int left_button = 0;
+int right_button = 0;
 
 const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
 const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -116,7 +119,32 @@ void key_pressed (unsigned char key, int x, int y) {
     plot_cube();
   else if(key == 'l')
     clear();
-} 
+}
+
+void mouse_click(int button, int state, int x, int y){
+  if(state == GLUT_DOWN){
+    if(button == GLUT_LEFT_BUTTON){
+      left_button = 1;
+    }else if(button == GLUT_RIGHT_BUTTON){
+      right_button = 1;
+    }
+  }else{
+    if(button == GLUT_LEFT_BUTTON){
+      left_button = 0;
+    }else if(button == GLUT_RIGHT_BUTTON){
+      right_button = 0;
+    }
+  }
+}
+
+void mouse_move(int x, int y){
+  printf("(%d, %d) L:%d R:%d\n", x, y, left_button, right_button);
+  if(left_button == 1){
+    glMatrixMode(GL_MODELVIEW);
+    gluLookAt(-400, -300, 200, 0, 0, 0, 0, 1, 0);
+    glutSwapBuffers();
+  }
+}
 
 void draw_main(int argc, char *argv[], vector_field *f){
 
@@ -164,5 +192,7 @@ void draw_main(int argc, char *argv[], vector_field *f){
 //  glutReshapeFunc(resize);
   glutDisplayFunc(clear);
   glutKeyboardFunc(key_pressed);
+  glutMotionFunc(mouse_move);
+  glutMouseFunc(mouse_click);
   glutMainLoop();
 }

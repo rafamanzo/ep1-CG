@@ -1,5 +1,5 @@
 ep1: main.o input.o vector_field.o vector_operations.o draw.o sphere.o
-	g++ main.o vector_field.o input.o vector_operations.o draw.o sphere.o -lglut -o ep1
+	g++ main.o vector_field.o input.o vector_operations.o draw.o sphere.o -lglut -lGLU -o ep1
 	
 main.o: main.cpp draw.h vector_field.h input.h draw.h
 	g++ -c main.cpp 
@@ -14,7 +14,7 @@ vector_operations.o: vector_operations.cpp vector_operations.h  vector_field.h
 	g++ -c vector_operations.cpp
 
 draw.o: draw.cpp draw.h vector_field.h vector_operations.h
-	g++ -c draw.cpp -lglut
+	g++ -c draw.cpp -lglut -lGLU
 sphere.o: sphere.cpp sphere.h vector_field.h
 	g++ -c sphere.cpp
 clean:
