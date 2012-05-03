@@ -15,6 +15,10 @@ spheres s;
 double time = 1;
 int left_button = 0;
 int right_button = 0;
+double eye_x = -6.0;
+double eye_y = -6.0;
+double eye_z = -10.0;
+int mouse_start_x, mouse_start_y;
 
 const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
 const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -128,6 +132,8 @@ void mouse_click(int button, int state, int x, int y){
     }else if(button == GLUT_RIGHT_BUTTON){
       right_button = 1;
     }
+    mouse_start_x = x;
+    mouse_start_y = y;
   }else{
     if(button == GLUT_LEFT_BUTTON){
       left_button = 0;
@@ -138,12 +144,20 @@ void mouse_click(int button, int state, int x, int y){
 }
 
 void mouse_move(int x, int y){
-  printf("(%d, %d) L:%d R:%d\n", x, y, left_button, right_button);
   if(left_button == 1){
-    glMatrixMode(GL_MODELVIEW);
-    gluLookAt(-400, -300, 200, 0, 0, 0, 0, 1, 0);
-    glutSwapBuffers();
+    eye_x += (mouse_start_x - x)*FATOR;
+    eye_y += (mouse_start_y - y)*FATOR;
+  }else if(right_button == 1){
+    eye_z += (mouse_start_y - y)*FATOR;
   }
+  
+  mouse_start_x = x;
+  mouse_start_y = y;
+  
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  gluLookAt(0.0, 0.0, 0.0, eye_x, eye_y, eye_z, 0.0, 1.0, 0.0);
+  plot_vectors();
 }
 
 void draw_main(int argc, char *argv[], vector_field *f){
