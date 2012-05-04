@@ -157,7 +157,10 @@ void mouse_move(int x, int y){
   
   glMatrixMode(GL_MODELVIEW);
   gluLookAt(0.0, 0.0, 0.0, eye_x, eye_y, eye_z, 0.0, 1.0, 0.0);
-  plot_vectors();
+  if(vec == 1)
+    plot_vectors();
+  if(start == 1)
+    plot_spheres();
 }
 
 void idle(){
