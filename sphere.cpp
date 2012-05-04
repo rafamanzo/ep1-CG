@@ -30,15 +30,16 @@ void set_sphere(spheres *s,int i, int j, int k, double x, double y, double z){
 
 void go_spheres(spheres *s, int i, int j,  int k, double t, vector_field field){
   vector v, v0;
+  double mod;
 
   v0.x = (*s).all[i][j][k].x;
   v0.y = (*s).all[i][j][k].y;
   v0.z = (*s).all[i][j][k].z;
 
   v = trilinear_interpolation(v0, field);
-  printf("\nANTES: v=(%f,%f,%f)\n",(*s).all[i][j][k].x,(*s).all[i][j][k].y,(*s).all[i][j][k].z);
-  (*s).all[i][j][k].x += t*v.x;
-  (*s).all[i][j][k].y += t*v.y;
-  (*s).all[i][j][k].z += t*v.z;
-  printf("DEPOIS: v=(%f,%f,%f)\n",(*s).all[i][j][k].x,(*s).all[i][j][k].y,(*s).all[i][j][k].z);
+  mod = module(v);
+
+  (*s).all[i][j][k].x += t*mod*cos(angle_x(v)*PI/180);
+  (*s).all[i][j][k].y += t*mod*cos(angle_y(v)*PI/180);
+  (*s).all[i][j][k].z += t*module(v)*cos(angle_z(v)*PI/180);
 }

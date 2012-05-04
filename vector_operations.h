@@ -7,3 +7,6 @@ double angle_x(vector v);
 double angle_y(vector v);
 double angle_z(vector v);
 vector trilinear_interpolation(vector v0, vector_field field);
+#ifndef PI
+#define PI 3.141592653589793
+#endif

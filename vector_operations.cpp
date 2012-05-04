@@ -3,20 +3,17 @@
 #include<math.h>
 #include "vector_field.h"
 #include "vector_operations.h"
-#ifndef PI
-#define PI 3.141592653589793
-#endif
 
 double angle_x(vector v){
-  return atan2(v.x,sqrt(v.y*v.y+v.z*v.z))*180/PI;
+  return atan2(v.y,v.z)*180/PI;
 }
 
 double angle_y(vector v){
-  return atan2(v.y,sqrt(v.x*v.x+v.z*v.z))*180/PI;
+  return atan2(v.x,v.z)*180/PI;
 }
 
 double angle_z(vector v){
-  return atan2(v.z,sqrt(v.x*v.x+v.y*v.y))*180/PI;
+  return atan2(v.x,v.y)*180/PI;
 }
 
 vector sum(vector v1, vector v2){
@@ -85,13 +82,13 @@ vector trilinear_interpolation(vector v0, vector_field field){
   vector zero, i1, i2, j1, j2, w1, w2;
   
   zero.x = zero.y = zero.z = 0.0;
-  
-  x1 = ceil(v0.x);
-  y1 = ceil(v0.y);
-  z1 = ceil(v0.z);
-  x0 = floor(v0.x);
-  y0 = floor(v0.y);
-  z0 = floor(v0.z);
+ 
+  x1 = ceil(fabs(v0.x));
+  y1 = ceil(fabs(v0.y));
+  z1 = ceil(fabs(v0.z));
+  x0 = floor(fabs(v0.x));
+  y0 = floor(fabs(v0.y));
+  z0 = floor(fabs(v0.z));
   
   if(x1 >= field.n_x || y1 >= field.n_y || z1 >= field.n_z || x0 < 0 || y0 < 0 || z0 < 0){
     return nearest_neighbour(v0, field);

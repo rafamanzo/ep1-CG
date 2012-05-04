@@ -1,0 +1,27 @@
+1. Visualização do campo de forças (30%)
+- Magnitude máxima e mínima
+- Correto posicionamento? (cubo)
+- Rotações 
+- Ângulos (Aparentemente ok)
+
+2. Simulação da dinâmica de partículas (40%)
+- Corrigir a trajetória (Aparentemente ok)
+- Interpolação trilinear (Aparentemente ok)
+- limites do campo (Dependem da representação do campo)
+
+3. Movimentação da câmera (15%)
+- Muito sensível?
+
+Observações gerais (15%)
+- Sempre mantenha a razão de perspectiva dos objetos da sua cena, mesmo durante o
+  redimensionamento da janela.
+- Sempre mantenha a sua cena centralizada na viewport.
+- Os planos near e far, devem ser ajustados apropriadamente para as dimensões do campo
+  lido.
+- A resolução dos cilindros e das esferas é arbitrária e fica por sua conta. Deixe a sua vida
+  mais fácil fazendo com que estes valores possam ser facilmente alterados (e.g. linha de
+  comando). (ESSE EU SEI FAZER!)
+- O seu programa deverá permitir a troca entre projeções (perspectiva e ortográfica) a
+  qualquer instante, mesmo durante a simulação.
+- Documente em um arquivo LEIAME.TXT instruções de como compilar o seu programa,
+  e como utilizar o seu software.
