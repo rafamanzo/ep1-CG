@@ -9,7 +9,6 @@
 
 #define FATOR 0.08
 
-
 vector_field field;
 spheres s;
 int start = 0;
@@ -50,6 +49,10 @@ static void plot_vectors(){
   int i, j, k;
   double mod, max_legth;
 
+  if( start == 0 ){ 
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMatrixMode(GL_MODELVIEW);
+  }
   max_legth = sqrt(pow(field.d_x, 2) + pow(field.d_y, 2) + pow(field.d_z, 2));
   glColor3d(0,0,1);
 
