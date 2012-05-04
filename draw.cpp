@@ -12,13 +12,18 @@
 
 vector_field field;
 spheres s;
-double time = 1;
+int start = 0;
+int vec = 0;
 int left_button = 0;
 int right_button = 0;
 double eye_x = -6.0;
 double eye_y = -6.0;
 double eye_z = -10.0;
 int mouse_start_x, mouse_start_y;
+GLfloat delta_time, now, last_time, deltaT;
+GLfloat count_time = 0;
+GLfloat slowMotionRatio = 2.0f;
+GLfloat elapsed_time = 0.0f; 
 
 const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
 const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -45,9 +50,7 @@ static void plot_vectors(){
   int i, j, k;
   double mod, max_legth;
 
-  glMatrixMode(GL_MODELVIEW);
   max_legth = sqrt(pow(field.d_x, 2) + pow(field.d_y, 2) + pow(field.d_z, 2));
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glColor3d(0,0,1);
 
   for(k = 0; k < field.n_z; k++){
@@ -56,11 +59,6 @@ static void plot_vectors(){
         mod = module(field.vectors[i][j][k]);
         if( mod > max_legth )
           mod = max_legth;
-
-//        printf("v = (%f,%f,%f)\n",field.vectors[i][j][k].x,field.vectors[i][j][k].y,field.vectors[i][j][k].z);
-//        printf("rx = %f\n",angle_x(field.vectors[i][j][k]));
-//        printf("ry = %f\n",angle_y(field.vectors[i][j][k]));
-//        printf("rz = %f\n",angle_z(field.vectors[i][j][k]));
         glPushMatrix();
          glTranslated((-i+field.d_x)*FATOR,(-j+field.d_y)*FATOR,(-k+field.d_z)*FATOR);
          glRotated(angle_y(field.vectors[i][j][k]),0,1,0);
@@ -71,26 +69,22 @@ static void plot_vectors(){
        }
     }
  }
- glutSwapBuffers();
-}
-
-// ALTERAR
-static void clear(void){
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glutSwapBuffers();
+ if(start == 0)
+  glutSwapBuffers();
 }
 
 static void plot_spheres(){
   int i, j, k;
- 
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glColor3d(1,0,0);
-  glMatrixMode(GL_MODELVIEW);
 
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glMatrixMode(GL_MODELVIEW);
+  if(vec == 1)
+      plot_vectors();
+  glColor3d(1,0,0);
   for(k = 0; k < field.n_z; k++){
     for(j = 0; j < field.n_y; j++){
       for(i = 0; i < field.n_x; i++){
-         go_spheres(&s,i,j,k,time, field);
+         go_spheres(&s,i,j,k,deltaT, field);
          glPushMatrix();
            glTranslated(s.all[i][j][k].x*FATOR,s.all[i][j][k].y*FATOR,s.all[i][j][k].z*FATOR);
            glutSolidSphere(s.r*FATOR*0.5,16,16);
@@ -98,31 +92,23 @@ static void plot_spheres(){
       }
     }
   }
-  time += 1;
   glutSwapBuffers();
-}
-
-static void plot_cube(){
-
-  glMatrixMode(GL_MODELVIEW);
-  glColor3d(0,0,1);
-
-  glPushMatrix();
-    glTranslated(-2,2,-6);
-    glutWireCube(fmax(fmax(field.n_x,field.n_y),field.n_z));
-  glPopMatrix();
 }
 
 void key_pressed (unsigned char key, int x, int y) {  
 
-  if( key == 'v')
-    plot_vectors();
+  if( key == 'v'){
+    if( vec == 0){
+      plot_vectors();
+      vec = 1;
+    }
+    else
+      vec = 0;
+  }
   else if(key == 's')
-    plot_spheres();
-  else if(key == 'c')
-    plot_cube();
-  else if(key == 'l')
-    clear();
+    start = 1;
+  else if(key == 'p')
+    start = 0;
 }
 
 void mouse_click(int button, int state, int x, int y){
@@ -160,6 +146,17 @@ void mouse_move(int x, int y){
   plot_vectors();
 }
 
+void idle(){
+  if( start == 1){
+    now = glutGet(GLUT_ELAPSED_TIME);    
+    deltaT = (now - last_time) / 1000.0f;
+    last_time = now;
+    deltaT /= slowMotionRatio;
+    elapsed_time += deltaT;
+    last_time = now;
+    glutPostRedisplay();  
+  }
+}
 void draw_main(int argc, char *argv[], vector_field *f){
 
 
@@ -204,9 +201,10 @@ void draw_main(int argc, char *argv[], vector_field *f){
   glRotated(180,0,0,1);  
 
 //  glutReshapeFunc(resize);
-  glutDisplayFunc(clear);
+  glutDisplayFunc(plot_spheres);
   glutKeyboardFunc(key_pressed);
   glutMotionFunc(mouse_move);
   glutMouseFunc(mouse_click);
+  glutIdleFunc(idle);
   glutMainLoop();
 }
