@@ -61,8 +61,6 @@ static void plot_vectors(){
           mod = max_legth;
         glPushMatrix();
          glTranslated((-i+field.d_x)*FATOR,(-j+field.d_y)*FATOR,(-k+field.d_z)*FATOR);
-printf("rx = %f ry = %f rz = %f\n",angle_x(field.vectors[i][j][k]),angle_y(field.vectors[i][j][k]),angle_z(field.vectors[i][j][k]));
-         
           glRotated(angle_y(field.vectors[i][j][k]),0,1,0);
           glRotated(angle_z(field.vectors[i][j][k]),0,0,1); 
           glRotated(angle_x(field.vectors[i][j][k]),1,0,0); 

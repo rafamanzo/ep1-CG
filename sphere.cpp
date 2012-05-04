@@ -39,7 +39,7 @@ void go_spheres(spheres *s, int i, int j,  int k, double t, vector_field field){
   v = trilinear_interpolation(v0, field);
   mod = module(v);
 
-  (*s).all[i][j][k].x += t*mod*cos(angle_x(v)*PI/180);
-  (*s).all[i][j][k].y += t*mod*cos(angle_y(v)*PI/180);
-  (*s).all[i][j][k].z += t*module(v)*cos(angle_z(v)*PI/180);
+  (*s).all[i][j][k].x += t*mod*cos(angle_x(v)*PI/180);printf("\ncosX(%f) %f\n",angle_x(v)*PI/180,cos(angle_x(v)*PI/180));
+  (*s).all[i][j][k].y += t*mod*cos(angle_y(v)*PI/180);printf("cosY(%f) %f\n",angle_y(v)*PI/180,cos(angle_y(v)*PI/180));
+  (*s).all[i][j][k].z += t*mod*cos(angle_z(v)*PI/180);printf("cosZ(%f) %f\n",angle_z(v)*PI/180,cos(angle_z(v)*PI/180));
 }

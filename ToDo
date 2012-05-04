@@ -5,7 +5,7 @@
 - Ângulos (Aparentemente ok)
 
 2. Simulação da dinâmica de partículas (40%)
-- Corrigir a trajetória (Aparentemente ok)
+- Corrigir a trajetória (Verificar no eixo z e em combinações de eixos)
 - Interpolação trilinear (Aparentemente ok)
 - limites do campo (Dependem da representação do campo)
 
