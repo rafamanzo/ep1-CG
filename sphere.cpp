@@ -4,7 +4,6 @@
 #include "sphere.h"
 #include <math.h>
 #include "vector_operations.h"
-#define FATOR 0.08
 
 void start_spheres(vector_field field, spheres *s){
   int i, j, k;
@@ -18,7 +17,7 @@ void start_spheres(vector_field field, spheres *s){
   for(k = 0; k < field.n_z; k++)
     for(j = 0; j < field.n_y; j++)
       for(i = 0; i < field.n_x; i++)
-        set_sphere(s,i,j,k,i-field.d_x,-j+field.d_y,k-field.d_z);
+        set_sphere(s,i,j,k,-field.n_x/2+i,-field.n_y/2+j,-field.n_z/2+k);
 
   (*s).r = fmax(fmax(field.d_x,field.d_y),field.d_z);
 }
@@ -41,21 +40,21 @@ void go_spheres(spheres *s, int i, int j,  int k, double t, vector_field field){
   mod = module(v);
 	
   if( v.x != 0.0 ) 
-    (*s).all[i][j][k].x += t*mod*cos(angle_x(v)*PI/180)*FATOR;
+    (*s).all[i][j][k].x += t*mod*cos(angle_x(v)*PI/180);
   if( (*s).all[i][j][k].x > field.n_x )
    (*s).all[i][j][k].x = field.n_x;
   else if( (*s).all[i][j][k].x < -(field.n_x) )
    (*s).all[i][j][k].x = -(field.n_x);
 
   if( v.y != 0.0 )
-    (*s).all[i][j][k].y -= t*mod*cos(angle_y(v)*PI/180)*FATOR;
+    (*s).all[i][j][k].y -= t*mod*cos(angle_y(v)*PI/180);
   if( (*s).all[i][j][k].y > field.n_y )
    (*s).all[i][j][k].y = field.n_y;
   else if( (*s).all[i][j][k].y < -field.n_y )
    (*s).all[i][j][k].y = -(field.n_y);
 
   if( v.z != 0.0 )
-    (*s).all[i][j][k].z += t*mod*cos(angle_z(v)*PI/180)*FATOR;
+    (*s).all[i][j][k].z += t*mod*cos(angle_z(v)*PI/180);
   if( (*s).all[i][j][k].z > field.n_z )
    (*s).all[i][j][k].z = field.n_z;
   else if( (*s).all[i][j][k].z < -(field.n_z) )

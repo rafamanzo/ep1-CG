@@ -20,7 +20,7 @@ double eye_y = -6.0;
 double eye_z = -10.0;
 int mouse_start_x, mouse_start_y;
 GLfloat delta_time, now, last_time, deltaT;
-GLfloat slowMotionRatio = 1.0f;
+GLfloat slowMotionRatio = 4.0f;
 
 const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
 const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -38,14 +38,14 @@ static void resize(int width, int height){
 
 static void plot_vectors(){
   int i, j, k;
-  double mod, max_legth;
+  double mod, max_legth, ratio;
 
   if( start == 0 )
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   max_legth = sqrt(pow(field.d_x, 2) + pow(field.d_y, 2) + pow(field.d_z, 2));
   glColor3d(0,0,1);
-
+  ratio = 800/600;
 
   for(k = 0; k < field.n_z; k++){
     for(j = 0; j < field.n_y; j++){
@@ -54,11 +54,11 @@ static void plot_vectors(){
         if( mod > max_legth )
           mod = max_legth;
         glPushMatrix();
-         glTranslated((i-field.d_x)*FATOR,(-j+field.d_y)*FATOR,(k-field.d_z)*FATOR);
+         glTranslated((-field.n_x/2+i)*FATOR,(-field.n_y/2+j)*FATOR,(-field.n_z/2+k)*FATOR);
           glRotated(angle_y(field.vectors[i][j][k]),0,1,0);
           glRotated(-angle_x(field.vectors[i][j][k]),1,0,0); 
           glRotated(angle_z(field.vectors[i][j][k]),0,0,1);
-          printf("%f %f %f\n",angle_x(field.vectors[i][j][k]),angle_y(field.vectors[i][j][k]),angle_z(field.vectors[i][j][k]));
+          //printf("%f %f %f\n",angle_x(field.vectors[i][j][k]),angle_y(field.vectors[i][j][k]),angle_z(field.vectors[i][j][k]));
          glutSolidCone(0.03,mod*FATOR,16,16);
         glPopMatrix();
        }
@@ -209,7 +209,7 @@ void draw_main(int argc, char *argv[], vector_field *f){
   glLoadIdentity();
   glRotated(180,0,1,0); 
   glRotated(180,0,0,1);  
-  glPopMatrix();
+  glPushMatrix();
 
   glutReshapeFunc(resize);
   glutDisplayFunc(plot_spheres);
