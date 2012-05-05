@@ -2,11 +2,14 @@
 #include<stdio.h>
 #include<string.h>
 #include "vector_field.h"
+#include "vector_operations.h"
 #include "input.h"
 
 void parseFile(char *file, vector_field *field){
   FILE *fp;
   int i, j, k;
+  double mod;
+
   fp = fopen(file, "r");
   
   fscanf(fp, "%d", &((*field).n_x));
@@ -23,7 +26,7 @@ void parseFile(char *file, vector_field *field){
     for(j = 0; j < ((*field).n_y); j++)
       (*field).vectors[i][j] = (vector *) malloc( ((*field).n_z) * sizeof(vector) );
   }
-    
+  (*field).max = -1.0;
   
   for(k = 0; k < (*field).n_z; k++){
     for(j = 0; j < (*field).n_y; j++){
@@ -31,6 +34,9 @@ void parseFile(char *file, vector_field *field){
         fscanf(fp, "%lf", &(((*field).vectors[i][j][k]).x));
         fscanf(fp, "%lf", &(((*field).vectors[i][j][k]).y));
         fscanf(fp, "%lf", &(((*field).vectors[i][j][k]).z));
+        mod = module((*field).vectors[i][j][k]);
+	      if(  mod > (*field).max )
+		      (*field).max = mod;
       }
     }
   }

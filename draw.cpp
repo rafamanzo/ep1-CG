@@ -15,12 +15,12 @@ int start;
 int vec;
 int left_button = 0;
 int right_button = 0;
-double eye_x = -6.0;
+double eye_x = 6.0;
 double eye_y = -6.0;
 double eye_z = -10.0;
 int mouse_start_x, mouse_start_y;
 GLfloat delta_time, now, last_time, deltaT;
-GLfloat slowMotionRatio = 2.0f;
+GLfloat slowMotionRatio = 1.0f;
 
 const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
 const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -32,15 +32,8 @@ const GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat high_shininess[] = { 100.0f };
 
 static void resize(int width, int height){
-    const float ar = (float) width / (float) height;
-    
     glViewport(0, 0, width, height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glFrustum(-ar, ar, -1.0, 1.0, 2.0, 100.0);
-    
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity() ;
+    gluLookAt(0.0, 0.0, 0.0, eye_x, eye_y, eye_z, 0.0, 1.0, 0.0);
 }
 
 static void plot_vectors(){
@@ -53,6 +46,7 @@ static void plot_vectors(){
   max_legth = sqrt(pow(field.d_x, 2) + pow(field.d_y, 2) + pow(field.d_z, 2));
   glColor3d(0,0,1);
 
+
   for(k = 0; k < field.n_z; k++){
     for(j = 0; j < field.n_y; j++){
       for(i = 0; i < field.n_x; i++){
@@ -60,11 +54,11 @@ static void plot_vectors(){
         if( mod > max_legth )
           mod = max_legth;
         glPushMatrix();
-         glTranslated((-i+field.d_x)*FATOR,(-j+field.d_y)*FATOR,(-k+field.d_z)*FATOR);
+         glTranslated((i-field.d_x)*FATOR,(-j+field.d_y)*FATOR,(k-field.d_z)*FATOR);
           glRotated(angle_y(field.vectors[i][j][k]),0,1,0);
-          glRotated(angle_z(field.vectors[i][j][k]),0,0,1); 
-          glRotated(angle_x(field.vectors[i][j][k]),1,0,0); 
-
+          glRotated(-angle_x(field.vectors[i][j][k]),1,0,0); 
+          glRotated(angle_z(field.vectors[i][j][k]),0,0,1);
+          printf("%f %f %f\n",angle_x(field.vectors[i][j][k]),angle_y(field.vectors[i][j][k]),angle_z(field.vectors[i][j][k]));
          glutSolidCone(0.03,mod*FATOR,16,16);
         glPopMatrix();
        }
@@ -215,8 +209,9 @@ void draw_main(int argc, char *argv[], vector_field *f){
   glLoadIdentity();
   glRotated(180,0,1,0); 
   glRotated(180,0,0,1);  
+  glPopMatrix();
 
-//  glutReshapeFunc(resize);
+  glutReshapeFunc(resize);
   glutDisplayFunc(plot_spheres);
   glutKeyboardFunc(key_pressed);
   glutMotionFunc(mouse_move);

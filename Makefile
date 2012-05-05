@@ -4,7 +4,7 @@ ep1: main.o input.o vector_field.o vector_operations.o draw.o sphere.o
 main.o: main.cpp draw.h vector_field.h input.h draw.h
 	g++ -c main.cpp 
 	
-input.o: input.cpp input.h vector_field.h
+input.o: input.cpp input.h vector_field.h vector_operations.h
 	g++ -c input.cpp
 	
 vector_field.o: vector_field.cpp vector_field.h vector_operations.cpp
