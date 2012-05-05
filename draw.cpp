@@ -59,7 +59,7 @@ static void plot_vectors(){
           glRotated(-angle_x(field.vectors[i][j][k]),1,0,0); 
           glRotated(angle_z(field.vectors[i][j][k]),0,0,1);
           //printf("%f %f %f\n",angle_x(field.vectors[i][j][k]),angle_y(field.vectors[i][j][k]),angle_z(field.vectors[i][j][k]));
-         glutSolidCone(0.03,mod*FATOR,16,16);
+         glutSolidCone(pow(s.r/field.max,2)*FATOR,mod/field.max*FATOR,16,16);
         glPopMatrix();
        }
     }

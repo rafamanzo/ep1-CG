@@ -41,23 +41,23 @@ void go_spheres(spheres *s, int i, int j,  int k, double t, vector_field field){
 	
   if( v.x != 0.0 ) 
     (*s).all[i][j][k].x += t*mod*cos(angle_x(v)*PI/180);
-  if( (*s).all[i][j][k].x > field.n_x )
-   (*s).all[i][j][k].x = field.n_x;
-  else if( (*s).all[i][j][k].x < -(field.n_x) )
-   (*s).all[i][j][k].x = -(field.n_x);
+  if( (*s).all[i][j][k].x > field.n_x/2 )
+   (*s).all[i][j][k].x = field.n_x/2;
+  else if( (*s).all[i][j][k].x < -(field.n_x)/2 )
+   (*s).all[i][j][k].x = -(field.n_x)/2;
 
   if( v.y != 0.0 )
-    (*s).all[i][j][k].y -= t*mod*cos(angle_y(v)*PI/180);
-  if( (*s).all[i][j][k].y > field.n_y )
-   (*s).all[i][j][k].y = field.n_y;
-  else if( (*s).all[i][j][k].y < -field.n_y )
-   (*s).all[i][j][k].y = -(field.n_y);
+    (*s).all[i][j][k].y += t*mod*cos(angle_y(v)*PI/180);
+  if( (*s).all[i][j][k].y > field.n_y/2 )
+   (*s).all[i][j][k].y = field.n_y/2;
+  else if( (*s).all[i][j][k].y < -field.n_y/2 )
+   (*s).all[i][j][k].y = -(field.n_y)/2;
 
   if( v.z != 0.0 )
     (*s).all[i][j][k].z += t*mod*cos(angle_z(v)*PI/180);
-  if( (*s).all[i][j][k].z > field.n_z )
-   (*s).all[i][j][k].z = field.n_z;
-  else if( (*s).all[i][j][k].z < -(field.n_z) )
-   (*s).all[i][j][k].z = -(field.n_z);
+  if( (*s).all[i][j][k].z > field.n_z/2 )
+   (*s).all[i][j][k].z = field.n_z/2;
+  else if( (*s).all[i][j][k].z < -(field.n_z)/2 )
+   (*s).all[i][j][k].z = -(field.n_z)/2;
 }
 

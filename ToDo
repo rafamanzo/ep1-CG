@@ -4,7 +4,6 @@
 - Rotações 
 
 Observações gerais (15%)
-- Sempre mantenha a sua cena centralizada na viewport.
 - Os planos near e far, devem ser ajustados apropriadamente para as dimensões do campo
   lido.
 - A resolução dos cilindros e das esferas é arbitrária e fica por sua conta. Deixe a sua vida
