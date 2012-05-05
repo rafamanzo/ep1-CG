@@ -14,12 +14,16 @@ void start_spheres(vector_field field, spheres *s){
     for(j = 0; j < field.n_y; j++)
       (*s).all[i][j] = (sphere *) malloc(field.n_z*sizeof(sphere));
 	}
+  (*s).r = fmax(fmax(field.d_x,field.d_y),field.d_z);
+}
+
+void sphere_initial_position(vector_field field, spheres *s){
+  int i, j, k;
+
   for(k = 0; k < field.n_z; k++)
     for(j = 0; j < field.n_y; j++)
       for(i = 0; i < field.n_x; i++)
-        set_sphere(s,i,j,k,-field.n_x/2+i,-field.n_y/2+j,-field.n_z/2+k);
-
-  (*s).r = fmax(fmax(field.d_x,field.d_y),field.d_z);
+        set_sphere(s,i,j,k,-field.n_x/2+i*field.d_x,-field.n_y/2+j*field.d_y,-field.n_z/2+k*field.d_z);
 }
 
 void set_sphere(spheres *s,int i, int j, int k, double x, double y, double z){

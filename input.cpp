@@ -27,6 +27,7 @@ void parseFile(char *file, vector_field *field){
       (*field).vectors[i][j] = (vector *) malloc( ((*field).n_z) * sizeof(vector) );
   }
   (*field).max = -1.0;
+  (*field).min = (*field).d_x+(*field).d_y+(*field).d_z;
   
   for(k = 0; k < (*field).n_z; k++){
     for(j = 0; j < (*field).n_y; j++){
@@ -37,6 +38,9 @@ void parseFile(char *file, vector_field *field){
         mod = module((*field).vectors[i][j][k]);
 	      if(  mod > (*field).max )
 		      (*field).max = mod;
+ 	      else if(  mod < (*field).min && mod > 0.0)
+		      (*field).min = mod;
+//        printf("MAX %f MIN %f\n",(*field).max,(*field).min);
       }
     }
   }

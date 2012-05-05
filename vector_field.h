@@ -13,4 +13,5 @@ typedef struct vf{
   int n_y;
   int n_z;
   double max;
+  double min;
 } vector_field;

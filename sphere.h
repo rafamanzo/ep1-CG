@@ -12,3 +12,4 @@ typedef struct sphs{
 void start_spheres(vector_field, spheres*);
 void set_sphere(spheres*,int, int, int, double, double, double);
 void go_spheres(spheres *,int,int,int, double, vector_field);
+void sphere_initial_position(vector_field, spheres *);

@@ -7,12 +7,12 @@
 #include "sphere.h"
 #include "vector_operations.h"
 
-#define FATOR 0.08
-
 vector_field field;
 spheres s;
 int start;
 int vec;
+double ratio;
+double max_legth;
 int left_button = 0;
 int right_button = 0;
 double eye_x = 6.0;
@@ -20,7 +20,7 @@ double eye_y = -6.0;
 double eye_z = -10.0;
 int mouse_start_x, mouse_start_y;
 GLfloat delta_time, now, last_time, deltaT;
-GLfloat slowMotionRatio = 4.0f;
+GLfloat slowMotionRatio = 10.0f;
 
 const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
 const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -38,15 +38,13 @@ static void resize(int width, int height){
 
 static void plot_vectors(){
   int i, j, k;
-  double mod, max_legth, ratio;
+  double mod;
 
   if( start == 0 )
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  max_legth = sqrt(pow(field.d_x, 2) + pow(field.d_y, 2) + pow(field.d_z, 2));
   glColor3d(0,0,1);
-  ratio = 800/600;
-
+ 
   for(k = 0; k < field.n_z; k++){
     for(j = 0; j < field.n_y; j++){
       for(i = 0; i < field.n_x; i++){
@@ -54,12 +52,12 @@ static void plot_vectors(){
         if( mod > max_legth )
           mod = max_legth;
         glPushMatrix();
-         glTranslated((-field.n_x/2+i)*FATOR,(-field.n_y/2+j)*FATOR,(-field.n_z/2+k)*FATOR);
+         glTranslated((-field.n_x/2+i*field.d_x)*ratio,(-field.n_y/2+j*field.d_y)*ratio,(-field.n_z/2+k*field.d_z)*ratio);
           glRotated(angle_y(field.vectors[i][j][k]),0,1,0);
           glRotated(-angle_x(field.vectors[i][j][k]),1,0,0); 
           glRotated(angle_z(field.vectors[i][j][k]),0,0,1);
           //printf("%f %f %f\n",angle_x(field.vectors[i][j][k]),angle_y(field.vectors[i][j][k]),angle_z(field.vectors[i][j][k]));
-         glutSolidCone(pow(s.r/field.max,2)*FATOR,mod/field.max*FATOR,16,16);
+         glutSolidCone(pow(s.r/field.max,2)*ratio,(mod/field.max)*ratio,16,16);
         glPopMatrix();
        }
     }
@@ -81,8 +79,8 @@ static void plot_spheres(){
       for(i = 0; i < field.n_x; i++){
          go_spheres(&s,i,j,k,deltaT, field);
          glPushMatrix();
-           glTranslated(s.all[i][j][k].x*FATOR,s.all[i][j][k].y*FATOR,s.all[i][j][k].z*FATOR);
-           glutSolidSphere(s.r*FATOR*0.5,16,16);
+           glTranslated(s.all[i][j][k].x*ratio,s.all[i][j][k].y*ratio,s.all[i][j][k].z*ratio);
+           glutSolidSphere(pow(s.r/max_legth,2)*ratio,16,16);//printf("%f ratio %f\n",s.r*ratio,ratio);
          glPopMatrix();
       }
     }
@@ -96,7 +94,7 @@ void initial_condition(){
   deltaT = 0.0f;
   start = 0;
   vec = 0;
-  start_spheres(field, &s);
+  sphere_initial_position(field, &s);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   last_time = glutGet(GLUT_ELAPSED_TIME);
   glutSwapBuffers();
@@ -140,10 +138,10 @@ void mouse_click(int button, int state, int x, int y){
 
 void mouse_move(int x, int y){
   if(left_button == 1){
-    eye_x += (mouse_start_x - x)*FATOR;
-    eye_y += (mouse_start_y - y)*FATOR;
+    eye_x += (mouse_start_x - x)*ratio;
+    eye_y += (mouse_start_y - y)*ratio;
   }else if(right_button == 1){
-    eye_z += (mouse_start_y - y)*FATOR;
+    eye_z += (mouse_start_y - y)*ratio;
   }
   
   mouse_start_x = x;
@@ -171,9 +169,14 @@ void idle(){
 void draw_main(int argc, char *argv[], vector_field *f){
 
   field = *f;
+  start_spheres(field, &s);
+  max_legth = sqrt(pow(field.d_x, 2) + pow(field.d_y, 2) + pow(field.d_z, 2));
+  ratio = (field.min/field.max)/max_legth;
+  printf("ratio = %f = field.min %f / field.max %f/max_legth %f\n",ratio,field.min,field.max,max_legth);
+
 
   glutInit(&argc, argv);
-  glutInitWindowSize(800,600);
+  glutInitWindowSize(1024,768);
   glutInitWindowPosition(0,0);
   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
   glutCreateWindow("Simulador");
