@@ -10,7 +10,10 @@ void parseFile(char *file, vector_field *field){
   int i, j, k;
   double mod;
 
-  fp = fopen(file, "r");
+  if( (fp = fopen(file, "r")) == NULL){
+    printf("Arquivo inválido\n");
+    exit(-1);
+  }
   
   fscanf(fp, "%d", &((*field).n_x));
   fscanf(fp, "%d", &((*field).n_y));
@@ -40,7 +43,6 @@ void parseFile(char *file, vector_field *field){
 		      (*field).max = mod;
  	      else if(  mod < (*field).min && mod > 0.0)
 		      (*field).min = mod;
-//        printf("MAX %f MIN %f\n",(*field).max,(*field).min);
       }
     }
   }

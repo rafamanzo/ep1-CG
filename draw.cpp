@@ -13,6 +13,8 @@ int start;
 int vec;
 double ratio;
 double max_legth;
+double cone_res;
+double sphere_res;
 int left_button = 0;
 int right_button = 0;
 double eye_x = 6.0;
@@ -57,7 +59,7 @@ static void plot_vectors(){
           glRotated(-angle_x(field.vectors[i][j][k]),1,0,0); 
           glRotated(angle_z(field.vectors[i][j][k]),0,0,1);
           //printf("%f %f %f\n",angle_x(field.vectors[i][j][k]),angle_y(field.vectors[i][j][k]),angle_z(field.vectors[i][j][k]));
-         glutSolidCone(pow(s.r/field.max,2)*ratio,(mod/field.max)*ratio,16,16);
+         glutSolidCone(pow(s.r/field.max,2)*ratio,(mod/field.max)*ratio,cone_res,cone_res);
         glPopMatrix();
        }
     }
@@ -80,7 +82,7 @@ static void plot_spheres(){
          go_spheres(&s,i,j,k,deltaT, field);
          glPushMatrix();
            glTranslated(s.all[i][j][k].x*ratio,s.all[i][j][k].y*ratio,s.all[i][j][k].z*ratio);
-           glutSolidSphere(pow(s.r/max_legth,2)*ratio,16,16);//printf("%f ratio %f\n",s.r*ratio,ratio);
+           glutSolidSphere(pow(s.r/max_legth,2)*ratio,sphere_res,sphere_res);
          glPopMatrix();
       }
     }
@@ -172,7 +174,16 @@ void draw_main(int argc, char *argv[], vector_field *f){
   start_spheres(field, &s);
   max_legth = sqrt(pow(field.d_x, 2) + pow(field.d_y, 2) + pow(field.d_z, 2));
   ratio = (field.min/field.max)/max_legth;
-  printf("ratio = %f = field.min %f / field.max %f/max_legth %f\n",ratio,field.min,field.max,max_legth);
+  
+  if(argc == 4){
+   cone_res = atof(argv[2]); 
+   sphere_res = atof(argv[3]);
+  }
+  else{
+   cone_res = 16; 
+   sphere_res = 16;
+  }
+
 
 
   glutInit(&argc, argv);

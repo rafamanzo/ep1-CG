@@ -4,10 +4,5 @@
 Observações gerais (15%)
 - Os planos near e far, devem ser ajustados apropriadamente para as dimensões do campo
   lido.
-- A resolução dos cilindros e das esferas é arbitrária e fica por sua conta. Deixe a sua vida
-  mais fácil fazendo com que estes valores possam ser facilmente alterados (e.g. linha de
-  comando). (ESSE EU SEI FAZER!)
 - O seu programa deverá permitir a troca entre projeções (perspectiva e ortográfica) a
   qualquer instante, mesmo durante a simulação.
-- Documente em um arquivo LEIAME.TXT instruções de como compilar o seu programa,
-  e como utilizar o seu software.
